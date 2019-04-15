@@ -63,7 +63,9 @@ THIRD_PARTY_APPS = [
     'rest_framework.authtoken',
 ]
 
-LOCAL_APPS = []
+LOCAL_APPS = [
+    'apps.users.apps.UsersAppConfig'
+]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 
@@ -74,7 +76,7 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
-#AUTH_USER_MODEL = ''
+AUTH_USER_MODEL = 'users.User'
 
 
 # Passwords
