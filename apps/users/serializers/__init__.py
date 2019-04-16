@@ -1,3 +1,4 @@
 from .users import (
-    UserModelSerializer
+    UserModelSerializer,
+    UserSignUpSerializer,
 )
