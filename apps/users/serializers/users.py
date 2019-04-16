@@ -10,6 +10,12 @@ from apps.users.models import User
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
 
+# Django
+from django.contrib.auth import authenticate
+
+# Models
+from rest_framework.authtoken.models import Token
+
 
 class UserModelSerializer(serializers.ModelSerializer):
     """User Model Serializer."""
@@ -82,3 +88,32 @@ class UserSignUpSerializer(serializers.Serializer):
         """Create user and return it."""
         data.pop('password2')
         return User.objects.create_user(**data)
+
+
+class UserLoginSerializer(serializers.Serializer):
+    """User Login Serializer."""
+
+    email = serializers.EmailField()
+    password = serializers.CharField()
+
+    def validate(self, data):
+        """Validate credentials."""
+        email = data.get('email')
+        password = data.get('password')
+        user = authenticate(username=email, password=password)
+        if not user:
+            raise serializers.ValidationError('Invalid credentials')
+        self.user = user
+        return data
+
+    def save(self):
+        """Retrieve auth token and user instance.
+        
+        If the token does't exists, it will be created.
+        """
+        user = self.user
+        token, created = Token.objects.get_or_create(user=user)
+        return (
+            token.key,
+            user
+        )
