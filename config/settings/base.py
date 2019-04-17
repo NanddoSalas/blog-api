@@ -26,7 +26,7 @@ USE_TZ = True
 
 # REST Framework
 
-RESREST_FRAMEWORK = {
+REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     ),
