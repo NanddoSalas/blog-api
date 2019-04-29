@@ -20,6 +20,8 @@ from rest_framework.permissions import (
 from rest_framework.filters import (
     SearchFilter,
 )
+from django_filters.rest_framework import DjangoFilterBackend
+from apps.posts.filters import PostFilter
 
 
 class PostViewSet(ModelViewSet):
@@ -30,9 +32,11 @@ class PostViewSet(ModelViewSet):
     
     filter_backends = (
         SearchFilter,
+        DjangoFilterBackend,
     )
 
     search_fields = ('title',)
+    filterset_class = PostFilter
 
     def get_permissions(self):
         """Assign permissions based on action."""
