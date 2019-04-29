@@ -16,12 +16,23 @@ from rest_framework.permissions import (
     IsAuthenticated
 )
 
+# Filters
+from rest_framework.filters import (
+    SearchFilter,
+)
+
 
 class PostViewSet(ModelViewSet):
     """Post View Set"""
 
     queryset = Post.objects.all()
     serializer_class = PostModelSerializer
+    
+    filter_backends = (
+        SearchFilter,
+    )
+
+    search_fields = ('title',)
 
     def get_permissions(self):
         """Assign permissions based on action."""
