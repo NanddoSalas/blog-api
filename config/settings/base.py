@@ -117,25 +117,6 @@ MIDDLEWARE = [
 ]
 
 
-# Templates
-
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [str(APPS_DIR.path('templates'))],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
-
-
 # Security
 
 SESSION_COOKIE_HTTPONLY = True
@@ -145,31 +126,3 @@ CSRF_COOKIE_HTTPONLY = True
 SECURE_BROWSER_XSS_FILTER = True
 
 X_FRAME_OPTIONS = 'DENY'
-
-
-# Admin
-
-ADMIN_URL = env('DJANGO_ADMIN_URL', default='admin/')
-
-
-# STATIC
-
-STATIC_ROOT = str(ROOT_DIR('staticfiles'))
-
-STATIC_URL = '/static/'
-
-STATICFILES_DIRS = [
-    str(APPS_DIR.path('static')),
-]
-
-STATICFILES_FINDERS = [
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-]
-
-
-# Media
-
-MEDIA_ROOT = str(APPS_DIR('media'))
-
-MEDIA_URL = '/media/'
