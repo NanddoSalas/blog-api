@@ -1,0 +1,16 @@
+FROM python:3.7
+
+MAINTAINER F3rn4ndd0
+
+COPY ./requirements/all.txt /requirements.txt
+RUN pip install -r requirements.txt
+
+COPY ./compose/local/django/start /start
+RUN chmod +x /start
+
+COPY ./compose/local/django/entrypoint /entrypoint
+RUN chmod +x /entrypoint
+
+WORKDIR /app
+
+ENTRYPOINT ["/entrypoint"]

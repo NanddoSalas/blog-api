@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: ./compose/local/django/dockerfile
+    image: blog_api_local_django
+    volumes:
+      - .:/app
+    env_file:
+      - ./.envs/.local/.django
+    ports:
+      - "8000:8000"
+    command: /start
