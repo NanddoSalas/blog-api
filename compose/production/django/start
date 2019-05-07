@@ -1,0 +1,5 @@
+#!/bin/bash
+
+gunicorn \
+    --config python:config.gunicorn \
+    config.wsgi:application

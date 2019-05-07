@@ -1,0 +1,25 @@
+FROM python:3.7
+
+MAINTAINER F3rn4ndd0
+
+RUN useradd django
+
+COPY ./requirements/all.txt /requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt \
+    && rm requirements.txt
+
+COPY ./compose/production/django/start /start
+RUN chmod +x /start
+RUN chown django /start
+
+COPY ./compose/production/django/entrypoint /entrypoint
+RUN chmod +x /entrypoint
+RUN chown django /entrypoint
+
+COPY . /app
+
+WORKDIR /app
+
+USER django
+
+ENTRYPOINT ["/entrypoint"]
