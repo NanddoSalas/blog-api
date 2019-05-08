@@ -25,4 +25,12 @@ CACHES = {
     }
 }
 
-EMAIL_BACKEND = env('DJANGO_EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
+# Email
+
+EMAIL_BACKEND = "anymail.backends.sendgrid.EmailBackend"
+
+ANYMAIL = {
+    "SENDGRID_API_KEY": env('ANYMAIL_API_KEY'),
+}
+
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
