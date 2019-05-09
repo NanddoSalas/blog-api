@@ -5,6 +5,7 @@ from rest_framework import serializers
 
 # Models
 from apps.users.models import User
+from rest_framework.authtoken.models import Token
 
 # Validators
 from rest_framework.validators import UniqueValidator
@@ -12,9 +13,10 @@ from django.contrib.auth.password_validation import validate_password
 
 # Django
 from django.contrib.auth import authenticate
+from django.conf import settings
 
-# Models
-from rest_framework.authtoken.models import Token
+# Utilitie
+import jwt
 
 
 class UserModelSerializer(serializers.ModelSerializer):
@@ -117,3 +119,32 @@ class UserLoginSerializer(serializers.Serializer):
             token.key,
             user
         )
+
+
+class EmailVerificationSerializer(serializers.Serializer):
+    """Email Verification Serializer."""
+
+    token = serializers.CharField()
+
+    def validate_token(self, token):
+        """Validate email verificatio Token."""
+        try:
+            data = jwt.decode(
+                jwt=token,
+                key=settings.SECRET_KEY,
+                algorithms=['HS256']
+            )
+        except jwt.exceptions.PyJWTError:
+            raise serializers.ValidationError('Invalid Token')
+        if not data['type'] == 'email_v':
+            raise serializers.ValidationError('Invalid Token')
+        self.context['email'] = data['email']
+        return token
+
+    def save(self):
+        """Active Account."""
+        user = User.objects.get(
+            email=self.context['email']
+        )
+        user.is_verifyed = True
+        user.save()
