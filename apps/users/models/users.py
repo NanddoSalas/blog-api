@@ -19,6 +19,11 @@ class User(AbstractUser):
         }
     )
 
+    is_verifyed = models.BooleanField(
+        'email is verifyed',
+        default=False
+    )
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
 
