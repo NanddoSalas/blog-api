@@ -18,6 +18,9 @@ from django.conf import settings
 # Utilitie
 import jwt
 
+# Tasks
+from apps.users.tasks import send_email_confirmation
+
 
 class UserModelSerializer(serializers.ModelSerializer):
     """User Model Serializer."""
@@ -89,7 +92,9 @@ class UserSignUpSerializer(serializers.Serializer):
     def create(self, data):
         """Create user and return it."""
         data.pop('password2')
-        return User.objects.create_user(**data)
+        user = User.objects.create_user(**data)
+        send_email_confirmation(pk=user.pk)
+        return user
 
 
 class UserLoginSerializer(serializers.Serializer):
@@ -105,6 +110,8 @@ class UserLoginSerializer(serializers.Serializer):
         user = authenticate(username=email, password=password)
         if not user:
             raise serializers.ValidationError('Invalid credentials')
+        if not user.is_verifyed:
+            raise serializers.ValidationError('Verify you email')
         self.user = user
         return data
 
