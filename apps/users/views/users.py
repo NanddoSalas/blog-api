@@ -19,6 +19,7 @@ from apps.users.serializers import (
     UserModelSerializer,
     UserSignUpSerializer,
     UserLoginSerializer,
+    EmailVerificationSerializer,
 )
 
 # Decorators
@@ -51,11 +52,13 @@ class UserViewSet(GenericViewSet,
             return UserLoginSerializer
         if self.action == 'signup':
             return UserSignUpSerializer
+        if self.action == 'verify':
+            return EmailVerificationSerializer
         return UserModelSerializer
 
     @action(detail=False, methods=['POST'])
     def signup(self, request, *args, **kwargs):
-        """Handdle signup process."""
+        """Handle signup process."""
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
@@ -64,7 +67,7 @@ class UserViewSet(GenericViewSet,
 
     @action(detail=False, methods=['POST'])
     def login(self, request, *args, **kwargs):
-        """Handdle login process.
+        """Handle login process.
         
         Retrieve token and user data if the credentials are valid.
         """
@@ -74,5 +77,16 @@ class UserViewSet(GenericViewSet,
         data = {
             'user': UserModelSerializer(user).data,
             'token': token
+        }
+        return Response(data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['POST'])
+    def verify(self, request, *args, **kwargs):
+        """Handle email verification process."""
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        data = {
+            'message': 'Account is now active.'
         }
         return Response(data, status=status.HTTP_200_OK)
