@@ -4,7 +4,7 @@
 from django.urls import path, include
 
 # Django REST Framework
-from rest_framework.routers import DefaultRouter
+from rest_framework.routers import SimpleRouter
 
 # Views
 from apps.posts.views import (
@@ -13,7 +13,7 @@ from apps.posts.views import (
 )
 
 
-router = DefaultRouter()
+router = SimpleRouter()
 
 router.register(
     r'posts',

@@ -4,13 +4,13 @@
 from django.urls import path, include
 
 # Django REST Framework
-from rest_framework.routers import DefaultRouter
+from rest_framework.routers import SimpleRouter
 
 # Views
 from apps.users.views import UserViewSet
 
 
-router = DefaultRouter()
+router = SimpleRouter()
 
 router.register(
     r'users',
@@ -18,6 +18,4 @@ router.register(
     basename='users'
 )
 
-urlpatterns = [
-    path('', include(router.urls)),
-]
+urlpatterns = router.urls
