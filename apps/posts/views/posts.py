@@ -1,7 +1,13 @@
 """Post Views."""
 
 # Django REST Framework
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import GenericViewSet
+from rest_framework.mixins import (
+    ListModelMixin,
+    DestroyModelMixin,
+    RetrieveModelMixin,
+    CreateModelMixin
+)
 
 # Models
 from apps.posts.models import Post
@@ -24,7 +30,11 @@ from django_filters.rest_framework import DjangoFilterBackend
 from apps.posts.filters import PostFilter
 
 
-class PostViewSet(ModelViewSet):
+class PostViewSet(GenericViewSet,
+                  CreateModelMixin,
+                  ListModelMixin,
+                  RetrieveModelMixin,
+                  DestroyModelMixin):
     """Post View Set"""
 
     queryset = Post.objects.all()
