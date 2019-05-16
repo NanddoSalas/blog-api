@@ -93,7 +93,7 @@ class UserSignUpSerializer(serializers.Serializer):
         """Create user and return it."""
         data.pop('password2')
         user = User.objects.create_user(**data)
-        send_email_confirmation(pk=user.pk)
+        send_email_confirmation.delay(pk=user.pk)
         return user
 
 
