@@ -2,6 +2,8 @@ FROM python:3.7
 
 MAINTAINER F3rn4ndd0
 
+RUN useradd django
+
 COPY ./requirements/all.txt /requirements.txt
 RUN pip install -r requirements.txt
 
@@ -11,6 +13,11 @@ RUN chmod +x /start
 COPY ./compose/local/django/entrypoint /entrypoint
 RUN chmod +x /entrypoint
 
+COPY ./compose/production/django/celery/worker /worker
+RUN chmod +x /worker
+
 WORKDIR /app
+
+USER django
 
 ENTRYPOINT ["/entrypoint"]
