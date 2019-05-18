@@ -1,15 +1,32 @@
 version: '3'
 
 services:
-  django:
+
+  django: &django
     build:
       context: .
       dockerfile: ./compose/production/django/dockerfile
     image: blog_api_production_django
-    volumes:
-      - .:/app
     env_file:
       - ./.envs/.production/.django
-    ports:
-      - "8000:8000"
     command: /start
+    depends_on:
+      - redis
+
+  celery_worker:
+    <<: *django
+    image: blog_api_production_django_worker
+    command: /worker
+
+  redis:
+    image: redis:5.0.4
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./compose/production/nginx/dockerfile
+    image: blog_api_production_nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - django
