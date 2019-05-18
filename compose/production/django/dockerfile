@@ -16,6 +16,10 @@ COPY ./compose/production/django/entrypoint /entrypoint
 RUN chmod +x /entrypoint
 RUN chown django /entrypoint
 
+COPY ./compose/production/django/celery/worker /worker
+RUN chmod +x /worker
+RUN chown django /worker
+
 COPY . /app
 
 WORKDIR /app
