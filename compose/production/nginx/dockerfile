@@ -1,0 +1,7 @@
+FROM nginx:1.16.0-alpine
+
+RUN rm /etc/nginx/conf.d/default.conf
+
+COPY ./compose/production/nginx/conf/django.conf /etc/nginx/conf.d/django.conf
+RUN chmod 440 /etc/nginx/conf.d/django.conf
+RUN chown nginx /etc/nginx/conf.d/django.conf
