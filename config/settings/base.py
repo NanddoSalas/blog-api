@@ -142,3 +142,8 @@ SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+
+# Celery
+
+CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='redis://redis/0')
