@@ -110,7 +110,7 @@ class UserLoginSerializer(serializers.Serializer):
         user = authenticate(username=email, password=password)
         if not user:
             raise serializers.ValidationError('Invalid credentials')
-        if not user.is_verifyed:
+        if not user.is_verified:
             raise serializers.ValidationError('Verify you email')
         self.user = user
         return data
@@ -153,5 +153,5 @@ class EmailVerificationSerializer(serializers.Serializer):
         user = User.objects.get(
             email=self.context['email']
         )
-        user.is_verifyed = True
+        user.is_verified = True
         user.save()

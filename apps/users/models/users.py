@@ -19,8 +19,8 @@ class User(AbstractUser):
         }
     )
 
-    is_verifyed = models.BooleanField(
-        'email is verifyed',
+    is_verified = models.BooleanField(
+        'email is verified',
         default=False
     )
 
