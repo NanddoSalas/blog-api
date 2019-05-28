@@ -4,10 +4,14 @@
 from django.test import TestCase
 
 # Serializers
-from apps.users.serializers import UserSignUpSerializer
+from apps.users.serializers import (
+    UserSignUpSerializer,
+    UserLoginSerializer,
+)
 
 # Models
 from apps.users.models import User
+from rest_framework.authtoken.models import Token
 
 # Utilities
 from apps.utilities import SerializerUtilities
@@ -68,3 +72,68 @@ class UserSignUpSerializerTest(TestCase, SerializerUtilities):
 
         self.assertEqual(username_error.code, 'unique')
         self.assertEqual(email_error.code, 'unique')
+
+
+class UserLoginSerializerTest(TestCase, SerializerUtilities):
+    """Test UserLoginSerializer."""
+
+    serializer_class = UserLoginSerializer
+
+    def setUp(self):
+        # Create a test user.
+
+        self.user_data = {
+            'username': 'Test',
+            'email': 'test@localhost',
+            'password': 'L!nux123',
+        }
+
+        self.user = User.objects.create_user(**self.user_data)
+
+    def test_unverified_email(self):
+        """Test the users's login with a unverified email."""
+        data = {
+            'email': 'test@localhost',
+            'password': 'L!nux123',
+        }
+        serializer = self.get_serializer(data=data)
+        self.assertFalse(serializer.is_valid())
+
+        message_error = serializer.errors['message'][0]
+        self.assertEqual(str(message_error), 'Verify you email')
+
+    def test_invalid_credentials(self):
+        """Test the login for a non-existent user."""
+        data = {
+            'email': 'root@localhost',
+            'password': 'toor',
+        }
+        serializer = self.get_serializer(data=data)
+        self.assertFalse(serializer.is_valid())
+
+        message_error = serializer.errors['message'][0]
+        self.assertEqual(str(message_error), 'Invalid credentials')
+
+    def test_valid_credentials(self):
+        """Test login."""
+        
+        # Verify user's email
+        user = self.user
+        user.is_verified = True
+        user.save()
+
+        data = {
+            'email': 'test@localhost',
+            'password': 'L!nux123',
+        }
+
+        serializer = self.get_serializer(data=data)
+        self.assertTrue(serializer.is_valid())
+
+        token, user = serializer.save()
+        self.assertTrue(
+            Token.objects.filter(
+                user=user,
+                key=token
+            ).exists()
+        )
