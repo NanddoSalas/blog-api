@@ -7,6 +7,7 @@ from django.test import TestCase
 from apps.users.serializers import (
     UserSignUpSerializer,
     UserLoginSerializer,
+    EmailVerificationSerializer,
 )
 
 # Models
@@ -14,6 +15,7 @@ from apps.users.models import User
 from rest_framework.authtoken.models import Token
 
 # Utilities
+from apps.users.tasks import get_email_v_token
 from apps.utilities import SerializerUtilities
 
 class UserSignUpSerializerTest(TestCase, SerializerUtilities):
@@ -137,3 +139,45 @@ class UserLoginSerializerTest(TestCase, SerializerUtilities):
                 key=token
             ).exists()
         )
+
+        
+class EmailVerificationSerializerTest(TestCase, SerializerUtilities):
+    """Test EmailVerificationSerializer."""
+
+    serializer_class = EmailVerificationSerializer
+
+    def setUp(self):
+        """Create a user and get his JWT."""
+        data = {
+            'username': 'Test',
+            'email': 'test@localhost',
+            'password': 'L!nux123',
+        }
+
+        self.user = User.objects.create_user(**data)
+        self.token = get_email_v_token(self.user.email)
+
+    def test_invalid_token(self):
+        """Test with a invalid token."""
+        data = {
+            'token': 'THIS_IS_A_INVALID_TOKEN'
+        }
+        serializer = self.get_serializer(data=data)
+        self.assertFalse(serializer.is_valid())
+
+        token_error = serializer.errors['token'][0]
+        self.assertEqual(str(token_error), 'Invalid Token')
+
+    def test_valid_token_and_save(self):
+        """Test the full prosses with a valid jwt."""
+        user = self.user
+        data = {
+            'token': self.token
+        }
+        serializer = self.get_serializer(data=data)
+        self.assertTrue(serializer.is_valid())
+
+        serializer.save()
+        user.refresh_from_db()
+
+        self.assertTrue(user.is_verified)
