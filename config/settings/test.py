@@ -28,3 +28,6 @@ PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 EMAIL_HOST = "localhost"
 EMAIL_PORT = 1025
+
+# Celery
+CELERY_TASK_ALWAYS_EAGER = True # Tasks will be executed locally
