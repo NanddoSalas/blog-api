@@ -4,3 +4,5 @@ from .posts import (
 from .comments import (
     CommentModelSerializer
 )
+
+__all__ = ['PostModelSerializer', 'CommentModelSerializer']

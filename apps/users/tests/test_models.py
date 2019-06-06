@@ -9,6 +9,7 @@ from apps.users.models import User
 # Exceptions
 from django.db.utils import IntegrityError
 
+
 class UserTest(TestCase):
     """Test the User model."""
 
@@ -27,5 +28,5 @@ class UserTest(TestCase):
         self.assertIsInstance(user, User)
         self.assertEqual(str(user), user.username)
         self.assertFalse(user.is_verified)
-        with self.assertRaises(IntegrityError) as error:
+        with self.assertRaises(IntegrityError):
             user = self.create_user()

@@ -17,5 +17,3 @@ class PostFilter(filter.FilterSet):
 
         model = Post
         fields = ('user',)
-
-# Please someone help me to understand how it works and why it works

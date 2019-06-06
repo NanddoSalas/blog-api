@@ -1,5 +1,6 @@
 """Utilities."""
 
+
 class SerializerUtilities():
     """Serializer utilities.
 

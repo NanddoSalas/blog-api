@@ -2,7 +2,8 @@
 Settings file for runing tests faster.
 """
 
-from .base import *
+from .base import * # noqa
+from .base import env
 
 
 # Base
@@ -30,4 +31,4 @@ EMAIL_HOST = "localhost"
 EMAIL_PORT = 1025
 
 # Celery
-CELERY_TASK_ALWAYS_EAGER = True # Tasks will be executed locally
+CELERY_TASK_ALWAYS_EAGER = True  # Tasks will be executed locally

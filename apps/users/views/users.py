@@ -36,7 +36,7 @@ class UserViewSet(GenericViewSet,
 
     queryset = User.objects.all()
     lookup_field = 'username'
-    
+
     def get_permissions(self):
         """Assign permission based on action."""
         permission_classes = []
@@ -67,8 +67,9 @@ class UserViewSet(GenericViewSet,
 
     @action(detail=False, methods=['POST'])
     def login(self, request, *args, **kwargs):
-        """Handle login process.
-        
+        """
+        Handle login process.
+
         Retrieve token and user data if the credentials are valid.
         """
         serialzer = self.get_serializer(data=request.data)

@@ -8,12 +8,11 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.mixins import (
     ListModelMixin,
     CreateModelMixin,
-    RetrieveModelMixin,
-    DestroyModelMixin
+    DestroyModelMixin,
 )
 
 # Models
-from apps.posts.models import Comment, Post
+from apps.posts.models import Post
 
 # Serializers
 from apps.posts.serializers import CommentModelSerializer
@@ -35,8 +34,9 @@ class CommentViewSet(GenericViewSet,
     serializer_class = CommentModelSerializer
 
     def dispatch(self, request, *args, **kwargs):
-        """Get post or 404.
-        
+        """
+        Get post or 404.
+
         Get post using post 'id' kwarg given per the url.
         """
         self.post_obj = get_object_or_404(Post, id=kwargs['id'])

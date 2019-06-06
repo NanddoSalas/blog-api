@@ -2,7 +2,7 @@
 Settings file for the development process.
 """
 
-from .base import *
+from .base import * # noqa
 from .base import env
 
 

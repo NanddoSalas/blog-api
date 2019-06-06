@@ -4,3 +4,5 @@ from .posts import (
 from .comments import (
     Comment
 )
+
+__all__ = ['Post', 'Comment']

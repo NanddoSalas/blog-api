@@ -4,3 +4,5 @@ from .posts import (
 from .comments import (
     CommentViewSet
 )
+
+__all__ = ['PostViewSet', 'CommentViewSet']

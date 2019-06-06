@@ -117,7 +117,6 @@ class UserLoginSerializer(serializers.Serializer):
 
     def save(self):
         """Retrieve auth token and user instance.
-        
         If the token does't exists, it will be created.
         """
         user = self.user

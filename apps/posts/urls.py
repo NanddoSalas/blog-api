@@ -1,8 +1,5 @@
 """Post urls."""
 
-# Django
-from django.urls import path, include
-
 # Django REST Framework
 from rest_framework.routers import SimpleRouter
 

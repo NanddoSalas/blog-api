@@ -39,7 +39,7 @@ class PostViewSet(GenericViewSet,
 
     queryset = Post.objects.all()
     serializer_class = PostModelSerializer
-    
+
     filter_backends = (
         SearchFilter,
         DjangoFilterBackend,

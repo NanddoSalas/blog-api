@@ -6,8 +6,9 @@ from django.db import models
 
 
 class User(AbstractUser):
-    """User model.
-    
+    """
+    User model.
+
     Change USERNAME_FILED to email.
     """
 

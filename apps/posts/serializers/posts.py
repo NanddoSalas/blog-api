@@ -16,7 +16,7 @@ class PostModelSerializer(serializers.ModelSerializer):
         """Meta Options."""
 
         model = Post
-        
+
         fields = '__all__'
 
         read_only_fields = (
@@ -27,8 +27,9 @@ class PostModelSerializer(serializers.ModelSerializer):
         )
 
     def create(self, data):
-        """Handdle post creation.
-        
+        """
+        Handdle post creation.
+
         User is taken from serializer context.
         """
         user = self.context['request'].user

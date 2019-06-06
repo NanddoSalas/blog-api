@@ -3,7 +3,6 @@
 # Django
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
-from django.template.loader import render_to_string
 
 # Models
 from apps.users.models import User
@@ -18,6 +17,7 @@ from config import celery_app
 def get_email_by_user_pk(pk):
     """Retrive User's email by the given pk."""
     return User.objects.get(pk=pk).email
+
 
 def get_email_v_token(email):
     """Create and return a JWT of type 'email_v' by the given email."""

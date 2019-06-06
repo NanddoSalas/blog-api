@@ -13,7 +13,7 @@ env = environ.Env()
 
 DEBUG = env.bool('DJANGO_DEBUG', True)
 
-TIME_ZONE = 'America/Chihuahua' # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
+TIME_ZONE = 'America/Chihuahua'  # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 
 LANGUAGE_CODE = 'en-us'
 
@@ -80,7 +80,8 @@ LOCAL_APPS = [
     'apps.posts.apps.PostsAppConfig',
 ]
 
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
+# https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 
 # Authentication

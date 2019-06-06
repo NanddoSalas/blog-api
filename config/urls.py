@@ -2,7 +2,6 @@
 
 # Django
 from django.urls import path, include
-from django.conf import settings
 
 # Views
 from config.views import Handler403, Handler404, api_root

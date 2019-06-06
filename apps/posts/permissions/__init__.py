@@ -4,3 +4,5 @@ from .posts import (
 from .comment import (
     IsCommentOwner
 )
+
+__all__ = ['IsPostOwner', 'IsCommentOwner']

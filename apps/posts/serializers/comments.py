@@ -30,4 +30,3 @@ class CommentModelSerializer(serializers.ModelSerializer):
         """Handdle Comment creation."""
         post = self.context['post']
         return Comment.objects.create(post=post, **data)
-        

@@ -18,6 +18,7 @@ from rest_framework.authtoken.models import Token
 from apps.users.tasks import get_email_v_token
 from apps.utilities import SerializerUtilities
 
+
 class UserSignUpSerializerTest(TestCase, SerializerUtilities):
     """Test UserSignUpSerializer."""
 
@@ -28,11 +29,11 @@ class UserSignUpSerializerTest(TestCase, SerializerUtilities):
         'password': 'L!nux123',
         'password2': 'L!nux123'
     }
-    
+
     def test_validate_empty_data(self):
         """Validate with empty data."""
         serializer = self.get_serializer(data={})
-        
+
         self.assertFalse(serializer.is_valid())
 
     def test_save(self):
@@ -64,7 +65,7 @@ class UserSignUpSerializerTest(TestCase, SerializerUtilities):
         data2 = self.user_data.copy()
         data1.pop('password2')
 
-        user = User.objects.create_user(**data1)
+        User.objects.create_user(**data1)
         serializer = self.get_serializer(data=data2)
 
         self.assertFalse(serializer.is_valid())
@@ -118,7 +119,7 @@ class UserLoginSerializerTest(TestCase, SerializerUtilities):
 
     def test_valid_credentials(self):
         """Test login."""
-        
+
         # Verify user's email
         user = self.user
         user.is_verified = True
@@ -140,7 +141,7 @@ class UserLoginSerializerTest(TestCase, SerializerUtilities):
             ).exists()
         )
 
-        
+
 class EmailVerificationSerializerTest(TestCase, SerializerUtilities):
     """Test EmailVerificationSerializer."""
 
