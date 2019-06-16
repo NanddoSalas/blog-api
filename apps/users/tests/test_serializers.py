@@ -8,6 +8,7 @@ from apps.users.serializers import (
     UserSignUpSerializer,
     UserLoginSerializer,
     EmailVerificationSerializer,
+    UserModelSerializer,
 )
 
 # Models
@@ -17,6 +18,7 @@ from rest_framework.authtoken.models import Token
 # Utilities
 from apps.users.tasks import get_email_v_token
 from apps.utilities import SerializerUtilities
+from django.utils import timezone
 
 
 class UserSignUpSerializerTest(TestCase, SerializerUtilities):
@@ -182,3 +184,71 @@ class EmailVerificationSerializerTest(TestCase, SerializerUtilities):
         user.refresh_from_db()
 
         self.assertTrue(user.is_verified)
+
+
+class UserModelSerializerTest(TestCase, SerializerUtilities):
+    """Test UserModelSerializerTest."""
+
+    serializer_class = UserModelSerializer
+
+    def setUp(self):
+        # Create a test user.
+
+        self.user_data = {
+            'username': 'Test',
+            'first_name': 'root',
+            'last_name': 'toor',
+            'email': 'test@localhost',
+            'password': 'L!nux123',
+        }
+
+        self.user = User.objects.create_user(**self.user_data)
+
+    def test_get_data(self):
+        """Serialize a python model to json."""
+        user = self.user
+        user_data = {
+            'username': user.username,
+            'email': user.email,
+            'first_name': user.first_name,
+            'last_name': user.last_name
+        }
+
+        serializer_data = self.get_serializer(user).data
+        serializer_data.pop('date_joined')  # ojo
+
+        self.assertDictEqual(user_data, serializer_data)
+
+    def test_update_allowed_fields(self):
+        """Update fields (username, email, first_name, last_name)."""
+        user = self.user
+        new_data = {
+            'username': 'tEST',
+            'first_name': 'ROOT',
+            'last_name': 'TOOR',
+        }
+        serializer = self.get_serializer(user, data=new_data)
+
+        self.assertTrue(serializer.is_valid())
+
+        user.refresh_from_db()
+        data = serializer.data
+
+        self.assertEqual(user.username, data['username'])
+        self.assertEqual(user.first_name, data['first_name'])
+        self.assertEqual(user.last_name, data['last_name'])
+
+    def test_red_only_fields(self):
+        """Try to update read-only fields, without waiting for a change."""
+        user = self.user
+        user_copy = user
+        new_data = {
+            'date_joined': str(timezone.now()),
+            'email': 'newtest@localhost'
+        }
+        serializer = self.get_serializer(user, data=new_data, partial=True)
+
+        self.assertTrue(serializer.is_valid())
+
+        user.refresh_from_db()
+        self.assertEqual(user, user_copy)
