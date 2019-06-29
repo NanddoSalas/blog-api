@@ -4,33 +4,14 @@
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 
-# Models
-from apps.users.models import User
-
-# Utilities
-import jwt
-
 # Celery App
 from config import celery_app
 
-
-def get_email_by_user_pk(pk):
-    """Retrive User's email by the given pk."""
-    return User.objects.get(pk=pk).email
-
-
-def get_email_v_token(email):
-    """Create and return a JWT of type 'email_v' by the given email."""
-    data = {
-        'type': 'email_v',
-        'email': email,
-    }
-    token = jwt.encode(
-        payload=data,
-        key=settings.SECRET_KEY,
-        algorithm='HS256'
-    )
-    return token.decode()
+# Utilities
+from apps.utilities import (
+    get_email_by_user_pk,
+    get_email_v_token,
+)
 
 
 @celery_app.task

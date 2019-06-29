@@ -1,7 +1,16 @@
 """Utilities."""
 
+# Django
+from django.conf import settings
+
 # Urls
 from django.urls import reverse
+
+# Models
+from apps.users.models import User
+
+# Utilities
+import jwt
 
 
 class SerializerUtilities():
@@ -26,3 +35,22 @@ class ViewSetTestUtilities():
         """Return the url based on action."""
         viewname = '{}-{}'.format(self.basename, action)
         return reverse(viewname, *args, **kwargs)
+
+
+def get_email_by_user_pk(pk):
+    """Retrive User's email by the given pk."""
+    return User.objects.get(pk=pk).email
+
+
+def get_email_v_token(email):
+    """Create and return a JWT of type 'email_v' by the given email."""
+    data = {
+        'type': 'email_v',
+        'email': email,
+    }
+    token = jwt.encode(
+        payload=data,
+        key=settings.SECRET_KEY,
+        algorithm='HS256'
+    )
+    return token.decode()
